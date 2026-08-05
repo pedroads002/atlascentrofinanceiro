@@ -85,8 +85,14 @@ export function QuickTransaction({
 
   const submit = () => {
     const parsed = parseBRL(valor);
-    if (!descricao.trim()) return toast.error("Informe uma descrição");
-    if (parsed <= 0) return toast.error("Informe um valor válido");
+    if (!descricao.trim()) {
+      toast.error("Informe uma descrição");
+      return;
+    }
+    if (parsed <= 0) {
+      toast.error("Informe um valor válido");
+      return;
+    }
 
     upsert.mutate(
       {
