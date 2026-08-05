@@ -34,7 +34,7 @@ export function buildAtlasContext(snapshot: AtlasSnapshot) {
       vencimento: item.dia_vencimento,
     })),
     despesas_fixas: snapshot.fixedExpenses.map((item) => ({
-      descricao: item.descricao,
+      nome: item.nome,
       valor: Number(item.valor),
       dia: item.dia_vencimento,
     })),
