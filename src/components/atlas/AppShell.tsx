@@ -174,12 +174,15 @@ export function AppShell({ children }: { children: ReactNode }) {
 
       <div className="flex min-w-0 flex-1 flex-col">
         <header className="safe-top sticky top-0 z-30 flex h-14 items-center gap-2 border-b border-border bg-background/85 px-3 backdrop-blur-xl sm:h-16 sm:gap-3 sm:px-6">
-          <div className="flex items-center gap-1 lg:hidden">
-            <Button variant="ghost" size="icon" className="tap" aria-label="Menu" onClick={() => setMobileOpen(true)}>
-              <Menu className="size-5" />
-            </Button>
-            <Logo className="hidden xs:flex" />
-          </div>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="tap lg:hidden"
+            aria-label="Menu"
+            onClick={() => setMobileOpen(true)}
+          >
+            <Menu className="size-5" />
+          </Button>
 
           <button
             onClick={() => setPaletteOpen(true)}
