@@ -10,14 +10,22 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as CartoesRouteImport } from './routes/cartoes'
 import { Route as CategoriasRouteImport } from './routes/categorias'
 import { Route as ContasRouteImport } from './routes/contas'
 import { Route as FixasRouteImport } from './routes/fixas'
 import { Route as LancamentosRouteImport } from './routes/lancamentos'
+import { Route as MetasRouteImport } from './routes/metas'
+import { Route as ParcelamentosRouteImport } from './routes/parcelamentos'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CartoesRoute = CartoesRouteImport.update({
+  id: '/cartoes',
+  path: '/cartoes',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CategoriasRoute = CategoriasRouteImport.update({
@@ -40,43 +48,90 @@ const LancamentosRoute = LancamentosRouteImport.update({
   path: '/lancamentos',
   getParentRoute: () => rootRouteImport,
 } as any)
+const MetasRoute = MetasRouteImport.update({
+  id: '/metas',
+  path: '/metas',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ParcelamentosRoute = ParcelamentosRouteImport.update({
+  id: '/parcelamentos',
+  path: '/parcelamentos',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/cartoes': typeof CartoesRoute
   '/categorias': typeof CategoriasRoute
   '/contas': typeof ContasRoute
   '/fixas': typeof FixasRoute
   '/lancamentos': typeof LancamentosRoute
+  '/metas': typeof MetasRoute
+  '/parcelamentos': typeof ParcelamentosRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/cartoes': typeof CartoesRoute
   '/categorias': typeof CategoriasRoute
   '/contas': typeof ContasRoute
   '/fixas': typeof FixasRoute
   '/lancamentos': typeof LancamentosRoute
+  '/metas': typeof MetasRoute
+  '/parcelamentos': typeof ParcelamentosRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/cartoes': typeof CartoesRoute
   '/categorias': typeof CategoriasRoute
   '/contas': typeof ContasRoute
   '/fixas': typeof FixasRoute
   '/lancamentos': typeof LancamentosRoute
+  '/metas': typeof MetasRoute
+  '/parcelamentos': typeof ParcelamentosRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/categorias' | '/contas' | '/fixas' | '/lancamentos'
+  fullPaths:
+    | '/'
+    | '/cartoes'
+    | '/categorias'
+    | '/contas'
+    | '/fixas'
+    | '/lancamentos'
+    | '/metas'
+    | '/parcelamentos'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/categorias' | '/contas' | '/fixas' | '/lancamentos'
-  id: '__root__' | '/' | '/categorias' | '/contas' | '/fixas' | '/lancamentos'
+  to:
+    | '/'
+    | '/cartoes'
+    | '/categorias'
+    | '/contas'
+    | '/fixas'
+    | '/lancamentos'
+    | '/metas'
+    | '/parcelamentos'
+  id:
+    | '__root__'
+    | '/'
+    | '/cartoes'
+    | '/categorias'
+    | '/contas'
+    | '/fixas'
+    | '/lancamentos'
+    | '/metas'
+    | '/parcelamentos'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  CartoesRoute: typeof CartoesRoute
   CategoriasRoute: typeof CategoriasRoute
   ContasRoute: typeof ContasRoute
   FixasRoute: typeof FixasRoute
   LancamentosRoute: typeof LancamentosRoute
+  MetasRoute: typeof MetasRoute
+  ParcelamentosRoute: typeof ParcelamentosRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -86,6 +141,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/cartoes': {
+      id: '/cartoes'
+      path: '/cartoes'
+      fullPath: '/cartoes'
+      preLoaderRoute: typeof CartoesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/categorias': {
@@ -116,15 +178,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LancamentosRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/metas': {
+      id: '/metas'
+      path: '/metas'
+      fullPath: '/metas'
+      preLoaderRoute: typeof MetasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/parcelamentos': {
+      id: '/parcelamentos'
+      path: '/parcelamentos'
+      fullPath: '/parcelamentos'
+      preLoaderRoute: typeof ParcelamentosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  CartoesRoute: CartoesRoute,
   CategoriasRoute: CategoriasRoute,
   ContasRoute: ContasRoute,
   FixasRoute: FixasRoute,
   LancamentosRoute: LancamentosRoute,
+  MetasRoute: MetasRoute,
+  ParcelamentosRoute: ParcelamentosRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
