@@ -109,7 +109,7 @@ function Categorias() {
                       <p className="text-xs capitalize text-muted-foreground">{category.tipo}</p>
                     </div>
                   </div>
-                  <Button variant="ghost" size="icon" aria-label="Excluir" onClick={() => remove.mutate(category.id)}>
+                  <Button variant="ghost" size="icon" className="tap" aria-label="Excluir" onClick={() => remove.mutate(category.id)}>
                     <Trash2 className="size-4 text-negative" />
                   </Button>
                 </div>

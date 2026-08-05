@@ -103,7 +103,7 @@ function Cartoes() {
                       Fecha dia {card.dia_fechamento} · vence dia {card.dia_vencimento}
                     </p>
                   </div>
-                  <Button variant="ghost" size="icon" aria-label="Excluir" onClick={() => remove.mutate(card.id)}>
+                  <Button variant="ghost" size="icon" className="tap" aria-label="Excluir" onClick={() => remove.mutate(card.id)}>
                     <Trash2 className="size-4 text-negative" />
                   </Button>
                 </div>

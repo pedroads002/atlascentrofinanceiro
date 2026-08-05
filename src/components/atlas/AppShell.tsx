@@ -44,6 +44,7 @@ import { useTheme } from "@/lib/theme";
 import { useAtlas } from "@/lib/atlas-data";
 import { Logo } from "./Logo";
 import { QuickTransaction } from "./QuickTransaction";
+import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 
 export const NAV = [
   { to: "/", label: "Dashboard", icon: LayoutDashboard },
@@ -60,6 +61,9 @@ export const NAV = [
   { to: "/assistente", label: "Assistente IA", icon: Sparkles },
 ] as const;
 
+/** The five destinations that live in the mobile bottom bar (last slot = "Mais"). */
+const MOBILE_TABS = ["/", "/lancamentos", "/cartoes", "/relatorios"] as const;
+
 export function AppShell({ children }: { children: ReactNode }) {
   const pathname = useRouterState({ select: (state) => state.location.pathname });
   const navigate = useNavigate();
@@ -70,8 +74,12 @@ export function AppShell({ children }: { children: ReactNode }) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [paletteOpen, setPaletteOpen] = useState(false);
   const [quickOpen, setQuickOpen] = useState(false);
+  const [moreOpen, setMoreOpen] = useState(false);
 
-  useEffect(() => setMobileOpen(false), [pathname]);
+  useEffect(() => {
+    setMobileOpen(false);
+    setMoreOpen(false);
+  }, [pathname]);
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
@@ -99,7 +107,7 @@ export function AppShell({ children }: { children: ReactNode }) {
             key={item.to}
             to={item.to}
             className={cn(
-              "group flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200",
+              "press group flex min-h-11 items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200",
               active
                 ? "bg-sidebar-accent text-sidebar-accent-foreground"
                 : "text-muted-foreground hover:bg-sidebar-accent/60 hover:text-foreground",
@@ -149,14 +157,14 @@ export function AppShell({ children }: { children: ReactNode }) {
         <div className="fixed inset-0 z-50 lg:hidden">
           <button
             aria-label="Fechar menu"
-            className="absolute inset-0 bg-foreground/30 backdrop-blur-sm"
+            className="absolute inset-0 bg-foreground/30 backdrop-blur-sm animate-in fade-in"
             onClick={() => setMobileOpen(false)}
           />
-          <div className="absolute inset-y-0 left-0 flex w-[264px] flex-col border-r border-sidebar-border bg-sidebar">
-            <div className="flex h-16 items-center justify-between px-4">
+          <div className="absolute inset-y-0 left-0 flex w-[264px] flex-col border-r border-sidebar-border bg-sidebar animate-in slide-in-from-left duration-300">
+            <div className="safe-top flex h-16 items-center justify-between px-4">
               <Logo />
-              <Button variant="ghost" size="icon" onClick={() => setMobileOpen(false)}>
-                <X className="size-4" />
+              <Button variant="ghost" size="icon" className="tap" onClick={() => setMobileOpen(false)}>
+                <X className="size-5" />
               </Button>
             </div>
             {sidebar}
@@ -165,14 +173,20 @@ export function AppShell({ children }: { children: ReactNode }) {
       ) : null}
 
       <div className="flex min-w-0 flex-1 flex-col">
-        <header className="sticky top-0 z-30 flex h-16 items-center gap-3 border-b border-border bg-background/80 px-4 backdrop-blur-xl sm:px-6">
-          <Button variant="ghost" size="icon" className="lg:hidden" onClick={() => setMobileOpen(true)}>
+        <header className="safe-top sticky top-0 z-30 flex h-14 items-center gap-2 border-b border-border bg-background/85 px-3 backdrop-blur-xl sm:h-16 sm:gap-3 sm:px-6">
+          <Button
+            variant="ghost"
+            size="icon"
+            className="tap lg:hidden"
+            aria-label="Menu"
+            onClick={() => setMobileOpen(true)}
+          >
             <Menu className="size-5" />
           </Button>
 
           <button
             onClick={() => setPaletteOpen(true)}
-            className="flex h-9 min-w-0 flex-1 items-center gap-2 rounded-xl border border-border bg-muted/50 px-3 text-sm text-muted-foreground transition-colors hover:bg-muted sm:max-w-sm"
+            className="press flex h-11 min-w-0 flex-1 items-center gap-2 rounded-xl border border-border bg-muted/50 px-3 text-sm text-muted-foreground transition-colors hover:bg-muted sm:h-9 sm:max-w-sm"
           >
             <Search className="size-4 shrink-0" />
             <span className="truncate">Buscar em tudo...</span>
@@ -181,15 +195,15 @@ export function AppShell({ children }: { children: ReactNode }) {
             </kbd>
           </button>
 
-          <div className="ml-auto flex shrink-0 items-center gap-2">
-            <Button onClick={() => setQuickOpen(true)} className="gap-1.5">
+          <div className="ml-auto flex shrink-0 items-center gap-1 sm:gap-2">
+            <Button onClick={() => setQuickOpen(true)} className="hidden gap-1.5 sm:inline-flex">
               <Plus className="size-4" />
               <span className="hidden sm:inline">Novo lançamento</span>
             </Button>
 
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" aria-label="Tema">
+                <Button variant="ghost" size="icon" className="tap" aria-label="Tema">
                   {theme === "dark" ? <Moon className="size-4" /> : theme === "light" ? <Sun className="size-4" /> : <Monitor className="size-4" />}
                 </Button>
               </DropdownMenuTrigger>
@@ -204,7 +218,10 @@ export function AppShell({ children }: { children: ReactNode }) {
 
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <button className="grid size-9 shrink-0 place-items-center rounded-full bg-primary text-xs font-bold text-primary-foreground">
+                <button
+                  aria-label="Conta"
+                  className="press grid size-10 shrink-0 place-items-center rounded-full bg-primary text-xs font-bold text-primary-foreground sm:size-9"
+                >
                   {(user?.email ?? "A").slice(0, 1).toUpperCase()}
                 </button>
               </DropdownMenuTrigger>
@@ -220,8 +237,75 @@ export function AppShell({ children }: { children: ReactNode }) {
           </div>
         </header>
 
-        <main className="mx-auto w-full max-w-[1400px] flex-1 px-4 py-6 sm:px-6 sm:py-8">{children}</main>
+        <main className="mx-auto w-full max-w-[1400px] flex-1 px-4 pb-[calc(6.5rem+env(safe-area-inset-bottom,0px))] pt-5 sm:px-6 sm:py-8 lg:pb-10">
+          {children}
+        </main>
       </div>
+
+      {/* Floating action button — thumb-reachable expense capture on mobile. */}
+      <button
+        onClick={() => setQuickOpen(true)}
+        aria-label="Novo lançamento"
+        className="press atlas-glow animate-pop fixed bottom-[calc(4.75rem+env(safe-area-inset-bottom,0px))] right-4 z-40 grid size-14 place-items-center rounded-full bg-primary text-primary-foreground lg:hidden"
+      >
+        <Plus className="size-6" />
+      </button>
+
+      {/* Native-style bottom tab bar. */}
+      <nav className="safe-bottom fixed inset-x-0 bottom-0 z-40 border-t border-border bg-background/90 backdrop-blur-xl lg:hidden">
+        <div className="grid grid-cols-5">
+          {MOBILE_TABS.map((to) => {
+            const item = NAV.find((entry) => entry.to === to)!;
+            const active = to === "/" ? pathname === "/" : pathname.startsWith(to);
+            return (
+              <Link
+                key={to}
+                to={to}
+                className={cn(
+                  "press flex min-h-[56px] flex-col items-center justify-center gap-1 px-1 py-2 text-[10px] font-semibold",
+                  active ? "text-primary" : "text-muted-foreground",
+                )}
+              >
+                <item.icon className={cn("size-5 transition-transform", active && "scale-110")} />
+                <span className="max-w-full truncate">{item.label.split(" ")[0]}</span>
+              </Link>
+            );
+          })}
+          <button
+            onClick={() => setMoreOpen(true)}
+            className="press flex min-h-[56px] flex-col items-center justify-center gap-1 px-1 py-2 text-[10px] font-semibold text-muted-foreground"
+          >
+            <Menu className="size-5" />
+            <span>Mais</span>
+          </button>
+        </div>
+      </nav>
+
+      <Sheet open={moreOpen} onOpenChange={setMoreOpen}>
+        <SheetContent side="bottom" className="safe-bottom rounded-t-3xl">
+          <SheetHeader className="pb-0">
+            <SheetTitle>Navegar</SheetTitle>
+          </SheetHeader>
+          <div className="grid grid-cols-3 gap-2 p-4">
+            {NAV.map((item) => {
+              const active = item.to === "/" ? pathname === "/" : pathname.startsWith(item.to);
+              return (
+                <Link
+                  key={item.to}
+                  to={item.to}
+                  className={cn(
+                    "press flex min-h-[84px] flex-col items-center justify-center gap-2 rounded-2xl border border-border p-3 text-center text-xs font-semibold",
+                    active ? "border-primary/40 bg-accent text-accent-foreground" : "text-muted-foreground",
+                  )}
+                >
+                  <item.icon className="size-5" />
+                  <span className="leading-tight">{item.label}</span>
+                </Link>
+              );
+            })}
+          </div>
+        </SheetContent>
+      </Sheet>
 
       <CommandDialog open={paletteOpen} onOpenChange={setPaletteOpen}>
         <CommandInput placeholder="Buscar páginas, lançamentos, categorias..." />

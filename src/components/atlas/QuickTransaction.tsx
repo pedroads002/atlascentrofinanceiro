@@ -121,28 +121,29 @@ export function QuickTransaction({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-xl gap-0 overflow-hidden p-0">
-        <DialogHeader className="border-b border-border px-6 py-4">
+      <DialogContent className="top-auto bottom-0 max-h-[92dvh] w-full max-w-xl translate-y-0 gap-0 overflow-hidden rounded-b-none rounded-t-3xl p-0 duration-300 data-[state=closed]:slide-out-to-bottom data-[state=open]:slide-in-from-bottom sm:top-1/2 sm:bottom-auto sm:-translate-y-1/2 sm:rounded-2xl">
+        <DialogHeader className="border-b border-border px-5 py-4 sm:px-6">
+          <span className="mx-auto mb-2 h-1 w-10 rounded-full bg-border sm:hidden" />
           <DialogTitle className="text-base font-bold tracking-tight">
             {editing ? "Editar lançamento" : "Novo lançamento"}
           </DialogTitle>
         </DialogHeader>
 
         <form
-          className="max-h-[70vh] space-y-5 overflow-y-auto px-6 py-5"
+          className="max-h-[70dvh] space-y-5 overflow-y-auto px-5 py-5 pb-[calc(1.25rem+env(safe-area-inset-bottom,0px))] sm:px-6"
           onSubmit={(event) => {
             event.preventDefault();
             submit();
           }}
         >
-          <div className="flex flex-wrap gap-2">
+          <div className="scroll-x -mx-5 flex gap-2 px-5 sm:mx-0 sm:flex-wrap sm:px-0">
             {TIPOS.map((option) => (
               <button
                 key={option}
                 type="button"
                 onClick={() => setTipo(option)}
                 className={cn(
-                  "rounded-full border px-3.5 py-1.5 text-xs font-semibold transition-colors",
+                  "press min-h-11 shrink-0 rounded-full border px-4 text-xs font-semibold transition-colors sm:min-h-9",
                   tipo === option
                     ? "border-primary bg-primary text-primary-foreground"
                     : "border-border text-muted-foreground hover:bg-muted",
@@ -256,21 +257,22 @@ export function QuickTransaction({
             />
           </div>
 
-          <label className="flex items-center gap-2 text-sm text-muted-foreground">
+          <label className="flex min-h-11 items-center gap-3 text-sm text-muted-foreground">
             <input
               type="checkbox"
               checked={pago}
               onChange={(event) => setPago(event.target.checked)}
-              className="size-4 accent-[var(--primary)]"
+              className="size-5 accent-[var(--primary)]"
             />
             Já foi pago / recebido
           </label>
 
-          <div className="flex items-center justify-end gap-2 border-t border-border pt-4">
-            <Button type="button" variant="ghost" onClick={() => onOpenChange(false)}>
+          {/* Sticky action row so Salvar is always reachable with one thumb. */}
+          <div className="sticky bottom-0 -mx-5 flex items-center gap-2 border-t border-border bg-card/95 px-5 py-3 backdrop-blur sm:static sm:mx-0 sm:justify-end sm:bg-transparent sm:px-0 sm:pb-0">
+            <Button type="button" variant="ghost" className="h-11 flex-1 sm:h-9 sm:flex-none" onClick={() => onOpenChange(false)}>
               Cancelar
             </Button>
-            <Button type="submit" disabled={upsert.isPending}>
+            <Button type="submit" className="h-11 flex-1 sm:h-9 sm:flex-none" disabled={upsert.isPending}>
               {upsert.isPending ? "Salvando..." : "Salvar lançamento"}
             </Button>
           </div>

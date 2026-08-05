@@ -101,7 +101,7 @@ function Contas() {
                   <p className="truncate text-sm font-bold">{account.nome}</p>
                   <p className="truncate text-xs text-muted-foreground">{account.instituicao ?? "Carteira"}</p>
                 </div>
-                <Button variant="ghost" size="icon" aria-label="Excluir" onClick={() => remove.mutate(account.id)}>
+                <Button variant="ghost" size="icon" className="tap" aria-label="Excluir" onClick={() => remove.mutate(account.id)}>
                   <Trash2 className="size-4 text-negative" />
                 </Button>
               </div>
