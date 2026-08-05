@@ -26,7 +26,7 @@ export const Route = createFileRoute("/relatorios")({
       { property: "og:description", content: "Gráficos interativos por mês, categoria, cartão, conta e forma de pagamento." },
     ],
   }),
-  component: Relatorios;
+  component: Relatorios,
 });
 
 const tooltipStyle = {
