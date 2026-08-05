@@ -110,16 +110,22 @@ type TableName =
 export function useUpsert<T extends TableName>(table: T) {
   const client = useQueryClient();
   const { user } = useAuth();
+  // Generic table writes: the row shape is validated by each form, not by TS here.
+  const db = supabase as unknown as {
+    from: (table: string) => {
+      insert: (values: unknown) => Promise<{ error: { message: string } | null }>;
+      update: (values: unknown) => {
+        eq: (column: string, value: string) => Promise<{ error: { message: string } | null }>;
+      };
+    };
+  };
   return useMutation({
     mutationFn: async (values: Record<string, unknown> & { id?: string }) => {
-      const payload = { ...values, user_id: user?.id } as TablesInsert<T>;
+      const payload = { ...values, user_id: user?.id };
       const { error } = values.id
-        ? await supabase
-            .from(table)
-            .update(values as TablesUpdate<T>)
-            .eq("id", values.id)
-        : await supabase.from(table).insert(payload);
-      if (error) throw error;
+        ? await db.from(table).update(values).eq("id", values.id)
+        : await db.from(table).insert(payload);
+      if (error) throw new Error(error.message);
     },
     onSuccess: () => client.invalidateQueries({ queryKey: atlasKey }),
   });
@@ -127,10 +133,17 @@ export function useUpsert<T extends TableName>(table: T) {
 
 export function useRemove(table: TableName) {
   const client = useQueryClient();
+  const db = supabase as unknown as {
+    from: (table: string) => {
+      delete: () => {
+        eq: (column: string, value: string) => Promise<{ error: { message: string } | null }>;
+      };
+    };
+  };
   return useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await supabase.from(table).delete().eq("id", id);
-      if (error) throw error;
+      const { error } = await db.from(table).delete().eq("id", id);
+      if (error) throw new Error(error.message);
     },
     onSuccess: () => client.invalidateQueries({ queryKey: atlasKey }),
   });
