@@ -53,11 +53,11 @@ function Calendario() {
         subtitle="Enxergue o mês inteiro antes que ele aconteça."
         actions={
           <div className="flex items-center gap-2">
-            <Button variant="ghost" size="icon" aria-label="Mês anterior" onClick={() => setReference(addMonths(reference, -1))}>
+            <Button variant="ghost" size="icon" className="tap" aria-label="Mês anterior" onClick={() => setReference(addMonths(reference, -1))}>
               <ChevronLeft className="size-4" />
             </Button>
             <span className="min-w-[150px] text-center text-sm font-semibold capitalize">{monthLabel(reference)}</span>
-            <Button variant="ghost" size="icon" aria-label="Próximo mês" onClick={() => setReference(addMonths(reference, 1))}>
+            <Button variant="ghost" size="icon" className="tap" aria-label="Próximo mês" onClick={() => setReference(addMonths(reference, 1))}>
               <ChevronRight className="size-4" />
             </Button>
           </div>

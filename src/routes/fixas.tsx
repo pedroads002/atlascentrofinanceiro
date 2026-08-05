@@ -115,7 +115,7 @@ function Fixas() {
                   onCheckedChange={(checked) => upsert.mutate({ id: expense.id, ativo: checked })}
                   aria-label="Ativa"
                 />
-                <Button variant="ghost" size="icon" aria-label="Excluir" onClick={() => remove.mutate(expense.id)}>
+                <Button variant="ghost" size="icon" className="tap" aria-label="Excluir" onClick={() => remove.mutate(expense.id)}>
                   <Trash2 className="size-4 text-negative" />
                 </Button>
               </li>

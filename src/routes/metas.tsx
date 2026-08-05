@@ -115,7 +115,7 @@ function Metas() {
                       <p className="text-xs text-muted-foreground">Até {formatDate(goal.data_alvo)}</p>
                     ) : null}
                   </div>
-                  <Button variant="ghost" size="icon" aria-label="Excluir" onClick={() => remove.mutate(goal.id)}>
+                  <Button variant="ghost" size="icon" className="tap" aria-label="Excluir" onClick={() => remove.mutate(goal.id)}>
                     <Trash2 className="size-4 text-negative" />
                   </Button>
                 </div>

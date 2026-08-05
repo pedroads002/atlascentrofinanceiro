@@ -131,7 +131,7 @@ function Parcelamentos() {
                       {pagas} de {item.total_parcelas} parcelas pagas · termina em {formatDate(isoDate(fim))}
                     </p>
                   </div>
-                  <Button variant="ghost" size="icon" aria-label="Excluir" onClick={() => remove.mutate(item.id)}>
+                  <Button variant="ghost" size="icon" className="tap" aria-label="Excluir" onClick={() => remove.mutate(item.id)}>
                     <Trash2 className="size-4 text-negative" />
                   </Button>
                 </div>
