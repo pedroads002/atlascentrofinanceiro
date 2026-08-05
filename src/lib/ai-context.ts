@@ -17,7 +17,8 @@ export function buildAtlasContext(snapshot: AtlasSnapshot) {
       economia: metrics.economia,
       custo_fixo: metrics.custoFixo,
       saldo_disponivel: metrics.saldoDisponivel,
-      projecao_fim_do_mes: metrics.projecao,
+      projecao_saldo_fim_do_mes: metrics.projecaoSaldo,
+      projecao_despesas_fim_do_mes: metrics.projecaoDespesas,
     },
     meta_economia_mensal: snapshot.profile?.meta_economia_mensal ?? null,
     categorias_do_mes: rankingPorCategoria(snapshot, hoje).map((item) => ({
@@ -32,7 +33,7 @@ export function buildAtlasContext(snapshot: AtlasSnapshot) {
       fechamento: item.dia_fechamento,
       vencimento: item.dia_vencimento,
     })),
-    despesas_fixas: snapshot.fixed.map((item) => ({
+    despesas_fixas: snapshot.fixedExpenses.map((item) => ({
       descricao: item.descricao,
       valor: Number(item.valor),
       dia: item.dia_vencimento,
