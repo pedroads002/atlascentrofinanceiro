@@ -100,28 +100,36 @@ function Assistente() {
           <div ref={fimRef} />
         </div>
 
-        <div className="mt-4 flex flex-wrap gap-2">
+        {/* Suggestions swipe horizontally on phones instead of wrapping into a tall block. */}
+        <div className="scroll-x -mx-4 mt-4 flex gap-2 px-4 sm:mx-0 sm:flex-wrap sm:px-0">
           {SUGESTOES.map((sugestao) => (
-            <Button key={sugestao} variant="secondary" size="sm" onClick={() => enviar(sugestao)}>
+            <Button
+              key={sugestao}
+              variant="secondary"
+              size="sm"
+              className="min-h-10 shrink-0"
+              onClick={() => enviar(sugestao)}
+            >
               {sugestao}
             </Button>
           ))}
         </div>
 
         <form
-          className="mt-3 flex gap-2"
+          className="sticky bottom-[calc(4.5rem+env(safe-area-inset-bottom,0px))] z-10 mt-3 flex gap-2 rounded-2xl bg-card/90 p-1 backdrop-blur lg:static lg:bg-transparent lg:p-0"
           onSubmit={(event) => {
             event.preventDefault();
             enviar(texto);
           }}
         >
           <Input
+            className="h-11"
             value={texto}
             onChange={(event) => setTexto(event.target.value)}
             placeholder="Pergunte algo sobre suas finanças…"
             aria-label="Mensagem"
           />
-          <Button type="submit" size="icon" disabled={mutation.isPending} aria-label="Enviar">
+          <Button type="submit" size="icon" className="tap" disabled={mutation.isPending} aria-label="Enviar">
             <Send className="size-4" />
           </Button>
         </form>
