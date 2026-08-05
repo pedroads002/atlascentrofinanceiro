@@ -1,4 +1,4 @@
-import { useEffect, useState, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import {
   ArrowLeftRight,
@@ -43,7 +43,8 @@ import { useAuth } from "@/hooks/useAuth";
 import { useTheme } from "@/lib/theme";
 import { useAtlas } from "@/lib/atlas-data";
 import { Logo } from "./Logo";
-import { QuickTransaction } from "./QuickTransaction";
+import { QuickTransaction, type QuickPrefill } from "./QuickTransaction";
+import { QUICK_ACTIONS, resolveCategoryId } from "@/lib/quick-actions";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 
 export const NAV = [
@@ -75,6 +76,34 @@ export function AppShell({ children }: { children: ReactNode }) {
   const [paletteOpen, setPaletteOpen] = useState(false);
   const [quickOpen, setQuickOpen] = useState(false);
   const [moreOpen, setMoreOpen] = useState(false);
+  const [actionsOpen, setActionsOpen] = useState(false);
+  const [prefill, setPrefill] = useState<QuickPrefill | null>(null);
+
+  // Long-press on the FAB (≈450ms) opens the shortcut sheet instead of the modal.
+  const pressTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const longPressed = useRef(false);
+
+  const clearPress = () => {
+    if (pressTimer.current) clearTimeout(pressTimer.current);
+    pressTimer.current = null;
+  };
+
+  const startPress = () => {
+    longPressed.current = false;
+    clearPress();
+    pressTimer.current = setTimeout(() => {
+      longPressed.current = true;
+      navigator.vibrate?.(12);
+      setActionsOpen(true);
+    }, 450);
+  };
+
+  const openQuick = (next: QuickPrefill | null = null) => {
+    setPrefill(next);
+    setQuickOpen(true);
+  };
+
+  useEffect(() => () => clearPress(), []);
 
   useEffect(() => {
     setMobileOpen(false);
