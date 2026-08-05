@@ -120,7 +120,7 @@ export function AppShell({ children }: { children: ReactNode }) {
       }
       if (!typing && event.key.toLowerCase() === "n" && !event.metaKey && !event.ctrlKey) {
         event.preventDefault();
-        setQuickOpen(true);
+        openQuick();
       }
     };
     window.addEventListener("keydown", onKeyDown);
@@ -383,7 +383,7 @@ export function AppShell({ children }: { children: ReactNode }) {
             <CommandItem
               onSelect={() => {
                 setPaletteOpen(false);
-                setQuickOpen(true);
+                openQuick();
               }}
             >
               <Plus className="mr-2 size-4" /> Novo lançamento
@@ -424,7 +424,7 @@ export function AppShell({ children }: { children: ReactNode }) {
         </CommandList>
       </CommandDialog>
 
-      <QuickTransaction open={quickOpen} onOpenChange={setQuickOpen} />
+      <QuickTransaction open={quickOpen} onOpenChange={setQuickOpen} prefill={prefill} />
     </div>
   );
 }
