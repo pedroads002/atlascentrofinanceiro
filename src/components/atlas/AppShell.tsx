@@ -44,6 +44,7 @@ import { useTheme } from "@/lib/theme";
 import { useAtlas } from "@/lib/atlas-data";
 import { Logo } from "./Logo";
 import { QuickTransaction } from "./QuickTransaction";
+import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 
 export const NAV = [
   { to: "/", label: "Dashboard", icon: LayoutDashboard },
@@ -60,6 +61,9 @@ export const NAV = [
   { to: "/assistente", label: "Assistente IA", icon: Sparkles },
 ] as const;
 
+/** The five destinations that live in the mobile bottom bar (last slot = "Mais"). */
+const MOBILE_TABS = ["/", "/lancamentos", "/cartoes", "/relatorios"] as const;
+
 export function AppShell({ children }: { children: ReactNode }) {
   const pathname = useRouterState({ select: (state) => state.location.pathname });
   const navigate = useNavigate();
@@ -70,8 +74,12 @@ export function AppShell({ children }: { children: ReactNode }) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [paletteOpen, setPaletteOpen] = useState(false);
   const [quickOpen, setQuickOpen] = useState(false);
+  const [moreOpen, setMoreOpen] = useState(false);
 
-  useEffect(() => setMobileOpen(false), [pathname]);
+  useEffect(() => {
+    setMobileOpen(false);
+    setMoreOpen(false);
+  }, [pathname]);
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
