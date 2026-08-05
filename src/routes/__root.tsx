@@ -6,11 +6,19 @@ import {
   useRouter,
   HeadContent,
   Scripts,
+  ScriptOnce,
 } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
+import { ThemeProvider, themeScript } from "@/lib/theme";
+import { AuthProvider, useAuth } from "@/hooks/useAuth";
+import { AppShell } from "@/components/atlas/AppShell";
+import { LoginScreen } from "@/components/atlas/LoginScreen";
+import { Logo } from "@/components/atlas/Logo";
+import { Toaster } from "@/components/ui/sonner";
+import { useAtlas, useBootstrapWorkspace } from "@/lib/atlas-data";
 
 function NotFoundComponent() {
   return (
@@ -77,21 +85,32 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { title: "Atlas — Centro de comando financeiro" },
+      {
+        name: "description",
+        content: "Atlas: gestão financeira pessoal com clareza total sobre saldo, gastos e metas.",
+      },
+      { name: "author", content: "Atlas Finance" },
+      { property: "og:title", content: "Atlas — Centro de comando financeiro" },
+      {
+        property: "og:description",
+        content: "Atlas: gestão financeira pessoal com clareza total sobre saldo, gastos e metas.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:site", content: "@Lovable" },
     ],
     links: [
       {
         rel: "stylesheet",
         href: appCss,
       },
-      { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
+      { rel: "icon", href: "/favicon.png", type: "image/png" },
+      { rel: "preconnect", href: "https://fonts.googleapis.com" },
+      { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
+      {
+        rel: "stylesheet",
+        href: "https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap",
+      },
     ],
   }),
   shellComponent: RootShell,
@@ -102,11 +121,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootShell({ children }: { children: ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="pt-BR" suppressHydrationWarning>
       <head>
         <HeadContent />
       </head>
       <body>
+        <ScriptOnce>{themeScript}</ScriptOnce>
         {children}
         <Scripts />
       </body>
@@ -119,8 +139,53 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-      <Outlet />
+      <ThemeProvider>
+        <AuthProvider>
+          <AuthGate>
+            {/* Required: nested routes render here. */}
+            <Outlet />
+          </AuthGate>
+          <Toaster position="top-right" />
+        </AuthProvider>
+      </ThemeProvider>
     </QueryClientProvider>
   );
+}
+
+function AuthGate({ children }: { children: ReactNode }) {
+  const { user, loading } = useAuth();
+
+  if (loading) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-background">
+        <div className="animate-pulse">
+          <Logo />
+        </div>
+      </div>
+    );
+  }
+
+  if (!user) return <LoginScreen />;
+
+  return (
+    <AppShell>
+      <Bootstrap />
+      {children}
+    </AppShell>
+  );
+}
+
+/** Creates the default account + categories the first time someone signs in. */
+function Bootstrap() {
+  const { data, isSuccess } = useAtlas();
+  const bootstrap = useBootstrapWorkspace();
+
+  useEffect(() => {
+    if (!isSuccess) return;
+    if (data.accounts.length === 0 && data.categories.length === 0 && bootstrap.isIdle) {
+      bootstrap.mutate();
+    }
+  }, [isSuccess, data.accounts.length, data.categories.length, bootstrap]);
+
+  return null;
 }

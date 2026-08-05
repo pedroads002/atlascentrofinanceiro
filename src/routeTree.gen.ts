@@ -10,33 +10,180 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AssistenteRouteImport } from './routes/assistente'
+import { Route as CalendarioRouteImport } from './routes/calendario'
+import { Route as CartoesRouteImport } from './routes/cartoes'
+import { Route as CategoriasRouteImport } from './routes/categorias'
+import { Route as ContasRouteImport } from './routes/contas'
+import { Route as FixasRouteImport } from './routes/fixas'
+import { Route as LancamentosRouteImport } from './routes/lancamentos'
+import { Route as MetasRouteImport } from './routes/metas'
+import { Route as ParcelamentosRouteImport } from './routes/parcelamentos'
+import { Route as RelatoriosRouteImport } from './routes/relatorios'
+import { Route as ResumoRouteImport } from './routes/resumo'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AssistenteRoute = AssistenteRouteImport.update({
+  id: '/assistente',
+  path: '/assistente',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CalendarioRoute = CalendarioRouteImport.update({
+  id: '/calendario',
+  path: '/calendario',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CartoesRoute = CartoesRouteImport.update({
+  id: '/cartoes',
+  path: '/cartoes',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CategoriasRoute = CategoriasRouteImport.update({
+  id: '/categorias',
+  path: '/categorias',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContasRoute = ContasRouteImport.update({
+  id: '/contas',
+  path: '/contas',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FixasRoute = FixasRouteImport.update({
+  id: '/fixas',
+  path: '/fixas',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LancamentosRoute = LancamentosRouteImport.update({
+  id: '/lancamentos',
+  path: '/lancamentos',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MetasRoute = MetasRouteImport.update({
+  id: '/metas',
+  path: '/metas',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ParcelamentosRoute = ParcelamentosRouteImport.update({
+  id: '/parcelamentos',
+  path: '/parcelamentos',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RelatoriosRoute = RelatoriosRouteImport.update({
+  id: '/relatorios',
+  path: '/relatorios',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResumoRoute = ResumoRouteImport.update({
+  id: '/resumo',
+  path: '/resumo',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/assistente': typeof AssistenteRoute
+  '/calendario': typeof CalendarioRoute
+  '/cartoes': typeof CartoesRoute
+  '/categorias': typeof CategoriasRoute
+  '/contas': typeof ContasRoute
+  '/fixas': typeof FixasRoute
+  '/lancamentos': typeof LancamentosRoute
+  '/metas': typeof MetasRoute
+  '/parcelamentos': typeof ParcelamentosRoute
+  '/relatorios': typeof RelatoriosRoute
+  '/resumo': typeof ResumoRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/assistente': typeof AssistenteRoute
+  '/calendario': typeof CalendarioRoute
+  '/cartoes': typeof CartoesRoute
+  '/categorias': typeof CategoriasRoute
+  '/contas': typeof ContasRoute
+  '/fixas': typeof FixasRoute
+  '/lancamentos': typeof LancamentosRoute
+  '/metas': typeof MetasRoute
+  '/parcelamentos': typeof ParcelamentosRoute
+  '/relatorios': typeof RelatoriosRoute
+  '/resumo': typeof ResumoRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/assistente': typeof AssistenteRoute
+  '/calendario': typeof CalendarioRoute
+  '/cartoes': typeof CartoesRoute
+  '/categorias': typeof CategoriasRoute
+  '/contas': typeof ContasRoute
+  '/fixas': typeof FixasRoute
+  '/lancamentos': typeof LancamentosRoute
+  '/metas': typeof MetasRoute
+  '/parcelamentos': typeof ParcelamentosRoute
+  '/relatorios': typeof RelatoriosRoute
+  '/resumo': typeof ResumoRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/assistente'
+    | '/calendario'
+    | '/cartoes'
+    | '/categorias'
+    | '/contas'
+    | '/fixas'
+    | '/lancamentos'
+    | '/metas'
+    | '/parcelamentos'
+    | '/relatorios'
+    | '/resumo'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/assistente'
+    | '/calendario'
+    | '/cartoes'
+    | '/categorias'
+    | '/contas'
+    | '/fixas'
+    | '/lancamentos'
+    | '/metas'
+    | '/parcelamentos'
+    | '/relatorios'
+    | '/resumo'
+  id:
+    | '__root__'
+    | '/'
+    | '/assistente'
+    | '/calendario'
+    | '/cartoes'
+    | '/categorias'
+    | '/contas'
+    | '/fixas'
+    | '/lancamentos'
+    | '/metas'
+    | '/parcelamentos'
+    | '/relatorios'
+    | '/resumo'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AssistenteRoute: typeof AssistenteRoute
+  CalendarioRoute: typeof CalendarioRoute
+  CartoesRoute: typeof CartoesRoute
+  CategoriasRoute: typeof CategoriasRoute
+  ContasRoute: typeof ContasRoute
+  FixasRoute: typeof FixasRoute
+  LancamentosRoute: typeof LancamentosRoute
+  MetasRoute: typeof MetasRoute
+  ParcelamentosRoute: typeof ParcelamentosRoute
+  RelatoriosRoute: typeof RelatoriosRoute
+  ResumoRoute: typeof ResumoRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,22 +195,100 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/assistente': {
+      id: '/assistente'
+      path: '/assistente'
+      fullPath: '/assistente'
+      preLoaderRoute: typeof AssistenteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/calendario': {
+      id: '/calendario'
+      path: '/calendario'
+      fullPath: '/calendario'
+      preLoaderRoute: typeof CalendarioRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/cartoes': {
+      id: '/cartoes'
+      path: '/cartoes'
+      fullPath: '/cartoes'
+      preLoaderRoute: typeof CartoesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/categorias': {
+      id: '/categorias'
+      path: '/categorias'
+      fullPath: '/categorias'
+      preLoaderRoute: typeof CategoriasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contas': {
+      id: '/contas'
+      path: '/contas'
+      fullPath: '/contas'
+      preLoaderRoute: typeof ContasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/fixas': {
+      id: '/fixas'
+      path: '/fixas'
+      fullPath: '/fixas'
+      preLoaderRoute: typeof FixasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/lancamentos': {
+      id: '/lancamentos'
+      path: '/lancamentos'
+      fullPath: '/lancamentos'
+      preLoaderRoute: typeof LancamentosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/metas': {
+      id: '/metas'
+      path: '/metas'
+      fullPath: '/metas'
+      preLoaderRoute: typeof MetasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/parcelamentos': {
+      id: '/parcelamentos'
+      path: '/parcelamentos'
+      fullPath: '/parcelamentos'
+      preLoaderRoute: typeof ParcelamentosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/relatorios': {
+      id: '/relatorios'
+      path: '/relatorios'
+      fullPath: '/relatorios'
+      preLoaderRoute: typeof RelatoriosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/resumo': {
+      id: '/resumo'
+      path: '/resumo'
+      fullPath: '/resumo'
+      preLoaderRoute: typeof ResumoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AssistenteRoute: AssistenteRoute,
+  CalendarioRoute: CalendarioRoute,
+  CartoesRoute: CartoesRoute,
+  CategoriasRoute: CategoriasRoute,
+  ContasRoute: ContasRoute,
+  FixasRoute: FixasRoute,
+  LancamentosRoute: LancamentosRoute,
+  MetasRoute: MetasRoute,
+  ParcelamentosRoute: ParcelamentosRoute,
+  RelatoriosRoute: RelatoriosRoute,
+  ResumoRoute: ResumoRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
