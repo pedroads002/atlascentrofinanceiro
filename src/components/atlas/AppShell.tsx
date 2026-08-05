@@ -1,4 +1,4 @@
-import { useEffect, useState, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import {
   ArrowLeftRight,
@@ -43,7 +43,8 @@ import { useAuth } from "@/hooks/useAuth";
 import { useTheme } from "@/lib/theme";
 import { useAtlas } from "@/lib/atlas-data";
 import { Logo } from "./Logo";
-import { QuickTransaction } from "./QuickTransaction";
+import { QuickTransaction, type QuickPrefill } from "./QuickTransaction";
+import { QUICK_ACTIONS, resolveCategoryId } from "@/lib/quick-actions";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 
 export const NAV = [
@@ -75,6 +76,34 @@ export function AppShell({ children }: { children: ReactNode }) {
   const [paletteOpen, setPaletteOpen] = useState(false);
   const [quickOpen, setQuickOpen] = useState(false);
   const [moreOpen, setMoreOpen] = useState(false);
+  const [actionsOpen, setActionsOpen] = useState(false);
+  const [prefill, setPrefill] = useState<QuickPrefill | null>(null);
+
+  // Long-press on the FAB (≈450ms) opens the shortcut sheet instead of the modal.
+  const pressTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const longPressed = useRef(false);
+
+  const clearPress = () => {
+    if (pressTimer.current) clearTimeout(pressTimer.current);
+    pressTimer.current = null;
+  };
+
+  const startPress = () => {
+    longPressed.current = false;
+    clearPress();
+    pressTimer.current = setTimeout(() => {
+      longPressed.current = true;
+      navigator.vibrate?.(12);
+      setActionsOpen(true);
+    }, 450);
+  };
+
+  const openQuick = (next: QuickPrefill | null = null) => {
+    setPrefill(next);
+    setQuickOpen(true);
+  };
+
+  useEffect(() => () => clearPress(), []);
 
   useEffect(() => {
     setMobileOpen(false);
@@ -91,7 +120,7 @@ export function AppShell({ children }: { children: ReactNode }) {
       }
       if (!typing && event.key.toLowerCase() === "n" && !event.metaKey && !event.ctrlKey) {
         event.preventDefault();
-        setQuickOpen(true);
+        openQuick();
       }
     };
     window.addEventListener("keydown", onKeyDown);
@@ -196,7 +225,7 @@ export function AppShell({ children }: { children: ReactNode }) {
           </button>
 
           <div className="ml-auto flex shrink-0 items-center gap-1 sm:gap-2">
-            <Button onClick={() => setQuickOpen(true)} className="hidden gap-1.5 sm:inline-flex">
+            <Button onClick={() => openQuick()} className="hidden gap-1.5 sm:inline-flex">
               <Plus className="size-4" />
               <span className="hidden sm:inline">Novo lançamento</span>
             </Button>
@@ -242,14 +271,53 @@ export function AppShell({ children }: { children: ReactNode }) {
         </main>
       </div>
 
-      {/* Floating action button — thumb-reachable expense capture on mobile. */}
+      {/* Floating action button — tap to capture, hold for shortcuts. */}
       <button
-        onClick={() => setQuickOpen(true)}
-        aria-label="Novo lançamento"
-        className="press atlas-glow animate-pop fixed bottom-[calc(4.75rem+env(safe-area-inset-bottom,0px))] right-4 z-40 grid size-14 place-items-center rounded-full bg-primary text-primary-foreground lg:hidden"
+        onClick={() => {
+          if (longPressed.current) return;
+          openQuick();
+        }}
+        onPointerDown={startPress}
+        onPointerUp={clearPress}
+        onPointerLeave={clearPress}
+        onPointerCancel={clearPress}
+        onContextMenu={(event) => {
+          event.preventDefault();
+          setActionsOpen(true);
+        }}
+        aria-label="Novo lançamento (segure para atalhos)"
+        title="Novo lançamento — segure para atalhos rápidos"
+        className="press atlas-glow animate-pop fixed bottom-[calc(4.75rem+env(safe-area-inset-bottom,0px))] right-4 z-40 grid size-14 place-items-center rounded-full bg-primary text-primary-foreground transition-transform duration-200 hover:scale-105 lg:bottom-8 lg:right-8 lg:size-16"
       >
-        <Plus className="size-6" />
+        <Plus className="size-6 lg:size-7" />
       </button>
+
+      {/* Long-press shortcuts: category is pre-filled, only the amount is missing. */}
+      <Sheet open={actionsOpen} onOpenChange={setActionsOpen}>
+        <SheetContent side="bottom" className="safe-bottom rounded-t-3xl">
+          <SheetHeader className="pb-0">
+            <SheetTitle>Atalhos rápidos</SheetTitle>
+          </SheetHeader>
+          <div className="grid grid-cols-3 gap-2 p-4 sm:grid-cols-5">
+            {QUICK_ACTIONS.map((action) => (
+              <button
+                key={action.id}
+                onClick={() => {
+                  setActionsOpen(false);
+                  openQuick({
+                    descricao: action.label,
+                    categoriaId: resolveCategoryId(action, data.categories),
+                  });
+                }}
+                className="press flex min-h-[88px] flex-col items-center justify-center gap-2 rounded-2xl border border-border bg-card p-3 text-center text-xs font-semibold transition-colors hover:border-primary/40 hover:bg-accent"
+              >
+                <span className="text-2xl leading-none">{action.emoji}</span>
+                <span className="leading-tight">{action.label}</span>
+              </button>
+            ))}
+          </div>
+        </SheetContent>
+      </Sheet>
 
       {/* Native-style bottom tab bar. */}
       <nav className="safe-bottom fixed inset-x-0 bottom-0 z-40 border-t border-border bg-background/90 backdrop-blur-xl lg:hidden">
@@ -315,7 +383,7 @@ export function AppShell({ children }: { children: ReactNode }) {
             <CommandItem
               onSelect={() => {
                 setPaletteOpen(false);
-                setQuickOpen(true);
+                openQuick();
               }}
             >
               <Plus className="mr-2 size-4" /> Novo lançamento
@@ -356,7 +424,7 @@ export function AppShell({ children }: { children: ReactNode }) {
         </CommandList>
       </CommandDialog>
 
-      <QuickTransaction open={quickOpen} onOpenChange={setQuickOpen} />
+      <QuickTransaction open={quickOpen} onOpenChange={setQuickOpen} prefill={prefill} />
     </div>
   );
 }
