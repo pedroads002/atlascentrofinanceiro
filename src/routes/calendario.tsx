@@ -70,9 +70,9 @@ function Calendario() {
             <span key={day} className="py-2">{day}</span>
           ))}
         </div>
-        <div className="grid grid-cols-7 gap-1">
+        <div className="grid grid-cols-7 gap-1 sm:gap-1">
           {dias.map((date, index) => {
-            if (!date) return <div key={`empty-${index}`} className="min-h-[92px] rounded-xl" />;
+            if (!date) return <div key={`empty-${index}`} className="min-h-[52px] rounded-xl sm:min-h-[92px]" />;
             const { transacoes, vencimentos } = eventosDoDia(date);
             const iso = isoDate(date);
             const entradas = transacoes
@@ -86,14 +86,20 @@ function Calendario() {
               <div
                 key={iso}
                 className={cn(
-                  "min-h-[92px] rounded-xl border border-border p-2 text-left transition-colors",
+                  "min-h-[52px] rounded-xl border border-border p-1 text-left transition-colors sm:min-h-[92px] sm:p-2",
                   iso === hojeIso ? "border-primary/60 bg-accent/40" : "hover:bg-muted/50",
                 )}
               >
                 <span className={cn("num text-xs font-bold", iso === hojeIso && "text-primary")}>
                   {date.getDate()}
                 </span>
-                <div className="mt-1 space-y-1">
+                {/* Phones get value dots; tablets and up get the full amounts. */}
+                <div className="mt-1 flex gap-1 sm:hidden">
+                  {entradas > 0 ? <span className="size-1.5 rounded-full bg-positive" /> : null}
+                  {saidas > 0 ? <span className="size-1.5 rounded-full bg-negative" /> : null}
+                  {vencimentos.length > 0 ? <span className="size-1.5 rounded-full bg-warning" /> : null}
+                </div>
+                <div className="mt-1 hidden space-y-1 sm:block">
                   {entradas > 0 ? (
                     <p className="num truncate text-[10px] font-semibold text-positive">+{brl(entradas)}</p>
                   ) : null}
