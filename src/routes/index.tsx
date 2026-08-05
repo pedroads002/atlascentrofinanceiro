@@ -20,15 +20,15 @@ import { brl, formatDate, isoDate, monthLabel } from "@/lib/format";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Dashboard financeiro — Atlas" },
+      { title: "Atlas - Seu Centro Financeiro" },
       {
         name: "description",
-        content: "Saldo, receitas, despesas, projeções e contas a vencer em um único painel.",
+        content: "Seu centro de comando financeiro. Controle total. Decisões melhores. Veja para onde seu dinheiro vai. Decida para onde ele deve ir.",
       },
-      { property: "og:title", content: "Dashboard financeiro — Atlas" },
+      { property: "og:title", content: "Atlas - Seu Centro Financeiro" },
       {
         property: "og:description",
-        content: "Saldo, receitas, despesas, projeções e contas a vencer em um único painel.",
+        content: "Seu centro de comando financeiro. Controle total. Decisões melhores. Veja para onde seu dinheiro vai. Decida para onde ele deve ir.",
       },
     ],
   }),

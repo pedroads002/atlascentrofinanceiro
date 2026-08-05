@@ -85,19 +85,23 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Atlas — Centro de comando financeiro" },
+      { title: "Atlas - Seu Centro Financeiro" },
       {
         name: "description",
-        content: "Atlas: gestão financeira pessoal com clareza total sobre saldo, gastos e metas.",
+        content: "Seu centro de comando financeiro. Controle total. Decisões melhores. Veja para onde seu dinheiro vai. Decida para onde ele deve ir.",
       },
       { name: "author", content: "Atlas Finance" },
-      { property: "og:title", content: "Atlas — Centro de comando financeiro" },
+      { property: "og:title", content: "Atlas - Seu Centro Financeiro" },
       {
         property: "og:description",
-        content: "Atlas: gestão financeira pessoal com clareza total sobre saldo, gastos e metas.",
+        content: "Seu centro de comando financeiro. Controle total. Decisões melhores. Veja para onde seu dinheiro vai. Decida para onde ele deve ir.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "Atlas - Seu Centro Financeiro" },
+      { name: "twitter:description", content: "Seu centro de comando financeiro. Controle total. Decisões melhores. Veja para onde seu dinheiro vai. Decida para onde ele deve ir." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/77b25a6e-7371-4828-b8c5-0d0b4989979f/id-preview-a5ed2ffe--e9cfc41b-6952-4b0d-a5d0-1688b729e759.lovable.app-1785923040290.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/77b25a6e-7371-4828-b8c5-0d0b4989979f/id-preview-a5ed2ffe--e9cfc41b-6952-4b0d-a5d0-1688b729e759.lovable.app-1785923040290.png" },
     ],
     links: [
       {
